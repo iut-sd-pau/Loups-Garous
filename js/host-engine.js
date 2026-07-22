@@ -548,8 +548,8 @@ const HostEngine = {
   // disponible ensuite, en s'adaptant a la duree de debat choisie par l'hote.
   computeSpeakingPlan(aliveCount, dayDurationSeconds) {
     const MIN_FREE = 25;      // secondes de debat libre garanties au minimum
-    const MIN_TURN = 6;       // secondes minimum par joueur pour que ca vaille le coup
-    const MAX_TURN = 20;      // secondes maximum par joueur (evite de trainer en petit comite)
+    const MIN_TURN = 9;       // secondes minimum par joueur (un peu plus de temps pour argumenter)
+    const MAX_TURN = 28;      // secondes maximum par joueur (evite quand meme de trainer en petit comite)
 
     if (aliveCount <= 1) return { enabled: false };
 
@@ -585,6 +585,15 @@ const HostEngine = {
       if (wantsTurns && plan && !plan.enabled) {
         updates['log/' + Date.now()] = { round: r.round, text: `🎙️ Trop de joueurs pour un tour de parole individuel avec ce temps de débat : direction le débat libre !`, ts: Date.now() };
       }
+
+      // Chacun recoit une carte d'activite nocturne privee a justifier
+      // pendant son tour de parole (systeme "parmi nous" adapte au village).
+      const cards = generateNightActionCards(r);
+      Object.entries(cards).forEach(([pid, card]) => {
+        updates[`players/${pid}/nightAction`] = card;
+        updates[`players/${pid}/lastNightActionId`] = card.cardId;
+      });
+
       await this.ref.update(updates);
     }, 8200);
   },

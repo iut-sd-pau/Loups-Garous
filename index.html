@@ -57,22 +57,56 @@
       <button id="btn-quick-match" class="btn btn-secondary btn-large">🎲 Partie aléatoire (rejoindre n'importe laquelle)</button>
     </div>
 
-    <button id="btn-how-to-play" class="link-btn">📖 Comment jouer ?</button>
+    <button id="btn-how-to-play" class="btn btn-secondary btn-large tutorial-cta">📖 Comment jouer ? <span id="tutorial-new-badge" class="tutorial-new-badge hidden">Nouveau ici ?</span></button>
   </div>
 </section>
 
 <!-- ===================== ECRAN REGLES ===================== -->
 <section id="screen-rules" class="screen">
-  <div class="panel">
-    <h2>📖 Règles rapides</h2>
-    <div class="rules-content">
-      <p><strong>But du jeu :</strong> les Villageois doivent démasquer et éliminer tous les Loups-Garous. Les Loups doivent éliminer assez de villageois pour être à égalité ou en supériorité numérique.</p>
-      <p>Chaque tour se joue en deux temps :</p>
-      <ul>
-        <li>🌙 <strong>Nuit</strong> — les rôles spéciaux agissent en secret (les Loups choisissent une victime, la Voyante espionne, la Sorcière soigne ou empoisonne...).</li>
-        <li>☀️ <strong>Jour</strong> — le village découvre les événements de la nuit, débat au chat, puis vote pour éliminer un suspect.</li>
-      </ul>
-      <p>La partie se termine quand un camp l'emporte, ou si les amoureux (liés par Cupidon) sont les deux derniers vivants.</p>
+  <div class="panel tutorial-panel">
+    <h2>📖 Comment jouer</h2>
+
+    <div class="shop-tabs tutorial-tabs">
+      <button class="shop-tab tutorial-tab active" data-tuto="principe">🎯 Le principe</button>
+      <button class="shop-tab tutorial-tab" data-tuto="deroule">🌗 Déroulé d'une partie</button>
+      <button class="shop-tab tutorial-tab" data-tuto="roles">🎭 Les rôles</button>
+      <button class="shop-tab tutorial-tab" data-tuto="astuces">💡 Astuces</button>
+    </div>
+
+    <div class="rules-content tutorial-content">
+
+      <div id="tuto-principe" class="tuto-page">
+        <p><strong>Le Loup-Garou, c'est quoi ?</strong> Un jeu de déduction et de bluff. Chaque joueur a un rôle secret appartenant à un camp. Le but : démasquer les Loups-Garous avant qu'ils ne dévorent tout le village — ou, si vous êtes un Loup, survivre en semant le doute.</p>
+        <p><strong>🐺 Camp des Loups</strong> — chaque nuit, ils dévorent secrètement un villageois. Ils gagnent quand ils sont aussi nombreux (ou plus) que les autres joueurs vivants.</p>
+        <p><strong>👤 Camp du Village</strong> — tous les rôles non-loups. Ils ne savent rien au départ ! Leur seule arme : observer, discuter, voter. Ils gagnent quand tous les loups sont éliminés.</p>
+        <p><strong>💘 Cas spécial</strong> — si Cupidon a lié deux Amoureux et qu'ils sont les deux derniers survivants, ils gagnent ensemble, peu importe leur camp d'origine.</p>
+        <p>Personne ne connaît le rôle des autres au départ (sauf indication contraire de son propre rôle). Tout l'intérêt du jeu est là : convaincre, douter, mentir ou dire la vérité.</p>
+      </div>
+
+      <div id="tuto-deroule" class="tuto-page hidden">
+        <p>Une partie se déroule en tours qui alternent <strong>Nuit</strong> et <strong>Jour</strong>, jusqu'à la victoire d'un camp :</p>
+        <ul>
+          <li>🌙 <strong>La nuit</strong> — tout le monde "dort" (l'écran s'assombrit), sauf les rôles qui ont une action à faire, chacun leur tour, en privé : les Loups choisissent une victime <em>ensemble</em> (ils doivent être d'accord !), la Voyante peut sonder quelqu'un, la Sorcière peut soigner ou empoisonner, etc. Prenez votre temps : la nuit n'est pas chronométrée.</li>
+          <li>🌅 <strong>Le réveil</strong> — le village découvre qui a disparu pendant la nuit (ou si tout le monde a survécu).</li>
+          <li>🎭 <strong>L'activité nocturne</strong> — chaque joueur vivant reçoit une carte privée décrivant ce qu'il a fait/vu/entendu cette nuit-là. Ce n'est <strong>pas forcément lié à votre vrai rôle</strong> — c'est juste un prétexte pour avoir quelque chose à raconter. Vous pouvez la raconter telle quelle, l'enjoliver, ou carrément mentir dessus : à vous de voir ce qui vous met le plus en sécurité !</li>
+          <li>🎙️ <strong>Le débat</strong> — chacun a un tour de parole pour raconter son activité nocturne, accuser, se défendre ou poser des questions. Un bouton permet de passer son tour si besoin. Une fois tout le monde passé, place au débat libre où tout le monde peut discuter en même temps.</li>
+          <li>🗳️ <strong>Le vote</strong> — le village désigne un suspect à éliminer. En cas d'égalité, personne n'est éliminé (sauf s'il y a un Bouc Émissaire).</li>
+        </ul>
+        <p>Et on recommence, nuit après nuit, jusqu'à ce qu'un camp l'emporte.</p>
+      </div>
+
+      <div id="tuto-roles" class="tuto-page hidden">
+        <p>Voici tous les rôles que l'hôte peut activer dans les réglages du lobby :</p>
+        <div id="tuto-roles-list" class="tuto-roles-list"></div>
+      </div>
+
+      <div id="tuto-astuces" class="tuto-page hidden">
+        <p><strong>Pour les Villageois :</strong> Écoutez qui se contredit. Une histoire qui change d'un round à l'autre est louche. Les Loups mentent souvent avec assurance — mais un mensonge trop parfait peut aussi être suspect.</p>
+        <p><strong>Pour les Loups :</strong> Utilisez votre carte d'activité nocturne comme couverture, même si elle semble suspecte au premier abord — un bon récit peut retourner la situation en votre faveur. Ne votez jamais tous pour la même personne trop vite, ça se voit.</p>
+        <p><strong>Pour tout le monde :</strong> Le chat privé (Loups) et le journal d'événements (icône 📜 en bas à droite en jeu) sont vos meilleurs amis. Le bouton 🎭 dans le HUD permet de revoir votre rôle à tout moment si vous l'oubliez.</p>
+        <p><strong>Débloqué :</strong> vous ne savez pas quoi dire pendant votre tour de parole ? Racontez simplement votre carte d'activité nocturne, posez une question à quelqu'un, ou dites qui vous trouvez louche et pourquoi.</p>
+      </div>
+
     </div>
     <button class="btn btn-secondary" onclick="UI.showScreen('screen-home')">Retour</button>
   </div>
@@ -243,6 +277,7 @@
     <div class="game-main">
       <!-- Zone centrale : actions / vote -->
       <div class="game-center">
+        <div id="night-action-card" class="night-action-card hidden"></div>
         <div id="action-progress" class="action-progress hidden"></div>
         <div id="narration-box" class="narration-box"></div>
         <div id="action-zone" class="action-zone"></div>
@@ -311,6 +346,7 @@
 <script src="js/sfx.js"></script>
 <script src="js/music.js"></script>
 <script src="js/shop.js"></script>
+<script src="js/nightactions.js"></script>
 <script src="js/host-engine.js"></script>
 <script src="js/bots.js"></script>
 <script src="js/game.js"></script>

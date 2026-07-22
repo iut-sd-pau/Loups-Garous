@@ -504,3 +504,48 @@ body.phase-day .game-hud{background:rgba(30,36,60,.6);}
    de pages qui "paraissent serrees" sur mobile (une seule chose trop large
    force tout le reste a rapetisser ou a scroller horizontalement). */
 html, body{max-width:100%; overflow-x:hidden;}
+
+/* ============================================================
+   V12 — CARTE D'ACTIVITE NOCTURNE (systeme "alibi a raconter")
+   ============================================================ */
+
+.night-action-card{
+  background:linear-gradient(135deg, rgba(217,87,143,.12), rgba(74,144,164,.08));
+  border:1px solid var(--lover); border-radius:12px; padding:12px 16px; margin-bottom:14px;
+  font-size:.88rem; line-height:1.45;
+}
+.night-action-card .nac-label{
+  display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.5px;
+  color:var(--lover); font-weight:700; margin-bottom:4px;
+}
+.night-action-card .nac-hint{display:block; margin-top:6px; font-size:.75rem; color:var(--text-dim); font-style:italic;}
+.night-action-card.my-turn-nudge{border-color:var(--accent-2); animation:pulseTimer 1.8s infinite;}
+
+/* ============================================================
+   V12 — TUTORIEL COMPLET
+   ============================================================ */
+
+.tutorial-cta{position:relative; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;}
+.tutorial-new-badge{
+  background:var(--accent); color:#fff; font-size:.68rem; font-weight:700; padding:3px 9px;
+  border-radius:20px; text-transform:uppercase; letter-spacing:.3px; animation:pulseTimer 1.6s infinite;
+}
+
+.tutorial-panel{max-width:640px;}
+.tutorial-tabs{margin-bottom:16px;}
+.tutorial-content{max-height:55vh; overflow-y:auto; padding-right:4px;}
+.tuto-page p{margin-bottom:12px;}
+.tuto-page ul{list-style:disc; padding-left:20px; margin-bottom:12px;}
+.tuto-page li{margin-bottom:10px;}
+
+.tuto-roles-list{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:10px;}
+.tuto-role-card{background:var(--bg-panel-2); border:1px solid var(--border); border-radius:10px; padding:12px;}
+.trc-header{display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;}
+.trc-icon{font-size:1.3rem;}
+.trc-team{font-size:.65rem; color:var(--text-dim); text-transform:uppercase; margin-left:auto;}
+.trc-desc{font-size:.8rem; color:var(--text-dim); margin:0;}
+
+@media (max-width: 640px) {
+  .tutorial-content{max-height:60vh;}
+  .tuto-roles-list{grid-template-columns:1fr;}
+}

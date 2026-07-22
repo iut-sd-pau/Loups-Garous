@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindGameScreen();
   bindEndScreen();
   bindShopScreen();
+  bindTutorialScreen();
   tryAutoRejoin();
   loadPublicRooms();
   handleInviteLink();
@@ -53,6 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
   bindGlobalClickSound();
   bindFirstInteractionAudio();
 });
+
+function bindTutorialScreen() {
+  document.querySelectorAll('.tutorial-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tutorial-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.tuto-page').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`tuto-${tab.dataset.tuto}`).classList.remove('hidden');
+    });
+  });
+  renderTutorialRoles();
+}
+
+function renderTutorialRoles() {
+  const list = document.getElementById('tuto-roles-list');
+  if (!list) return;
+  const teamLabel = { [TEAM.WOLF]: '🐺 Camp des Loups', [TEAM.VILLAGE]: '👤 Camp du Village', [TEAM.SOLO]: '🎭 Camp solo' };
+  list.innerHTML = Object.values(ROLES).map(role => `
+    <div class="tuto-role-card">
+      <div class="trc-header"><span class="trc-icon">${role.icon}</span><strong>${escapeHtml(role.name)}</strong><span class="trc-team">${teamLabel[role.team] || ''}</span></div>
+      <p class="trc-desc">${escapeHtml(role.desc)}</p>
+    </div>
+  `).join('');
+}
 
 // Les navigateurs bloquent tout son tant qu'il n'y a pas eu une vraie
 // interaction utilisateur : on lance donc la musique de menu au tout
@@ -90,6 +115,8 @@ function renderProfileBar() {
   const p = Profile.load();
   const el = document.getElementById('profile-coins');
   if (el) el.textContent = `🪙 ${p.coins}`;
+  const badge = document.getElementById('tutorial-new-badge');
+  if (badge) badge.classList.toggle('hidden', p.stats.gamesPlayed > 0);
 }
 
 /* ---------------- BOUTIQUE & PERSONNALISATION ---------------- */
@@ -897,6 +924,7 @@ function renderGameScreen(room) {
   renderEventLog(room);
   renderPhaseHud(room);
   renderSpeakerIndicator(room);
+  renderNightActionCard(room, me);
   renderNarrationAndActions(room, me);
   renderActionProgressBar(room);
   renderHostControls(room);
@@ -1302,6 +1330,23 @@ function renderNarrationAndActions(room, me) {
     }
     return;
   }
+}
+
+function renderNightActionCard(room, me) {
+  const el = document.getElementById('night-action-card');
+  if (!el) return;
+  const showStatuses = ['day-reveal', 'day-discuss', 'day-vote'];
+  if (!showStatuses.includes(room.status) || !me.alive || !me.nightAction) {
+    el.classList.add('hidden');
+    return;
+  }
+  el.classList.remove('hidden');
+  const isMyTurn = room.status === 'day-discuss' && isMySpeakingTurn(room);
+  el.classList.toggle('my-turn-nudge', isMyTurn);
+  const hint = isMyTurn
+    ? "C'est ton tour : raconte ça au village (embellis, mens, ou dis la vérité, à toi de voir) !"
+    : "Garde ça en tête pour ton tour de parole — ou pour recouper l'histoire des autres.";
+  el.innerHTML = `<span class="nac-label">🎭 Ton activité cette nuit</span>${escapeHtml(me.nightAction.text)}<span class="nac-hint">${hint}</span>`;
 }
 
 function renderActionProgressBar(room) {

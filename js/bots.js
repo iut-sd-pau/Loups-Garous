@@ -100,7 +100,7 @@ const BotController = {
     else if (room.status === 'day-vote') this.handleDayVote(room, bots);
     else if (room.status === 'hunter') this.handleHunter(room, bots);
     else if (room.status === 'mayor-succession') this.handleMayorSuccession(room, bots);
-    else if (room.status === 'day-discuss') this.handleChat(room, bots);
+    else if (room.status === 'day-discuss') { this.handleSpeakingTurn(room, bots); this.handleChat(room, bots); }
   },
 
   once(key, fn, minDelay, maxDelay) {
@@ -547,6 +547,7 @@ const BotController = {
 
   // ============ CHAT ============
   handleChat(room, bots) {
+    if (room.day && room.day.speakerPhase === 'turns') return; // gere par handleSpeakingTurn
     const roundKey = `chat-${room.round}`;
     if (this.chatRoundsHandled.has(roundKey)) return;
     this.chatRoundsHandled.add(roundKey);
@@ -559,5 +560,47 @@ const BotController = {
         setTimeout(() => this.sendVillageLine(id, p, null), delay);
       }
     });
+  },
+
+  // ============ PAROLE PENDANT SON TOUR (raconte l'activite nocturne) ============
+  handleSpeakingTurn(room, bots) {
+    const day = room.day || {};
+    if (day.speakerPhase !== 'turns') return;
+    const order = day.speakOrder || [];
+    const speakerId = order[day.speakerIndex || 0];
+    const speakerBot = bots.find(([id]) => id === speakerId);
+    if (!speakerBot) return;
+    const [id, p] = speakerBot;
+    const key = `turnspeak-${room.round}-${day.speakerIndex}-${id}`;
+    this.once(key, async () => {
+      const fresh = (await this.ref.once('value')).val();
+      if (!fresh || fresh.status !== 'day-discuss') return;
+      const freshDay = fresh.day || {};
+      if ((freshDay.speakOrder || [])[freshDay.speakerIndex || 0] !== id) return;
+      await this.sendTurnOpeningLine(id, p);
+      // Le bot rend la parole peu apres plutot que de monopoliser tout son temps
+      setTimeout(async () => {
+        const f2 = (await this.ref.once('value')).val();
+        if (!f2 || f2.status !== 'day-discuss') return;
+        const d2 = f2.day || {};
+        if ((d2.speakOrder || [])[d2.speakerIndex || 0] !== id) return;
+        await this.ref.child('day/skipRequested').set(id);
+      }, 3500 + Math.random() * 3500);
+    }, 1200, 3500);
+  },
+
+  async sendTurnOpeningLine(id, p) {
+    const fresh = (await this.ref.once('value')).val();
+    if (!fresh || fresh.status !== 'day-discuss') return;
+    const na = fresh.players[id] && fresh.players[id].nightAction;
+    let text;
+    if (na && na.text) {
+      const intros = ["Alors moi, cette nuit... ", "Bon, je vous raconte : ", "Perso il s'est passé un truc bizarre : ", "Cette nuit, "];
+      text = this.randomFrom(intros) + na.text.charAt(0).toLowerCase() + na.text.slice(1);
+    } else {
+      const result = this.buildVillageLine(fresh, id, p, null);
+      text = result.text;
+    }
+    await db.ref(`rooms/${this.roomCode}/chat`).push({ pid: id, name: p.name, text, channel: 'village', ts: Date.now() });
   }
 };

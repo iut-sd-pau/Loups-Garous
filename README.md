@@ -1,6 +1,14 @@
-# 🐺 LOUPS-GAROUS NOUVELLE GENERATION — En ligne (V11)
+# 🐺 LOUPS-GAROUS NOUVELLE GENERATION — En ligne (V12)
 
 Jeu du Loup-Garou multijoueur en temps réel, jouable dans le navigateur, entre amis, avec des inconnus, ou avec des bots. De 1 a 50 joueurs.
+
+## V12 — Debats vivants (systeme d'alibis) + tutoriel complet
+
+- 🎭 **Carte d'activité nocturne pour CHAQUE joueur** (façon "Parmi Nous" adapté au village) : à chaque réveil, tout le monde reçoit une carte privée décrivant ce qu'il a fait, vu ou entendu cette nuit-là — totalement indépendante de son vrai rôle. Un Villageois innocent peut tomber sur une carte très suspecte à devoir justifier, pendant qu'un Loup peut hériter d'un alibi parfait. Certaines cartes impliquent un autre joueur (accusation à commenter, alibi partagé à vérifier), d'autres restent vagues et laissent place à l'interprétation. Pendant son tour de parole, chacun raconte sa carte — en l'enjolivant, en mentant dessus, ou en disant la vérité, à lui de voir. Fini de voter sans le moindre indice à se mettre sous la dent !
+- 🕰️ **Un peu plus de temps de parole** (9 à 28 secondes par joueur selon le nombre de joueurs et la durée du débat, contre 6-20s avant), pour laisser le temps d'argumenter sans plomber le rythme.
+- 🤖 **Les bots racontent aussi leur activité nocturne** pendant leur tour, puis rendent la parole plus tôt plutôt que de monopoliser tout leur temps — cohérent avec le nouveau système.
+- 📖 **Vrai tutoriel complet**, accessible depuis l'accueil (bouton mis en avant, avec un badge "Nouveau ici ?" pour les joueurs qui n'ont jamais fait de partie) : le principe du jeu, le déroulé complet d'une partie étape par étape, la liste de tous les rôles avec leur description, et des astuces pour débutants. Pensé pour quelqu'un qui ne connaît même pas le jeu du Loup-Garou.
+- ✅ **Testé** : génération des cartes (placeholders toujours remplis, pas de répétition immédiate, pas de crash à petit effectif) vérifiée par un test automatisé.
 
 ## V11 — Des bots qui parlent vraiment comme des humains
 
@@ -110,6 +118,7 @@ loup-garou/
     ├── sfx.js                  Sons generes en direct (Web Audio API)
     ├── music.js                Musique d'ambiance generative (accords + arpege)
     ├── shop.js                  Profil, monnaie, boutique cosmetique, succes
+    ├── nightactions.js         Cartes d'activite nocturne / alibis a raconter
     ├── host-engine.js         Machine a etats (executee par le client hote)
     ├── bots.js                 IA des bots (executee par le client hote)
     └── game.js                  Rendu temps reel + actions joueurs + matchmaking
